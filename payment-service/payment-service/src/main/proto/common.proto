@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpccommon";
+option java_outer_classname = "GeneratorProto";
+option objc_class_prefix = "RTG";
+
+package service;
+
+service OrderService{
+  //golang grpc start
+  rpc saveProduct(Product) returns (SaveProduct);
+  rpc saveProductsData(stream Product) returns (SaveProduct);
+  rpc saveProductsDataAll(Product) returns (stream SaveProduct);
+  rpc saveProductDataAllBack(stream Product) returns (stream SaveProduct);
+  //golang grpc end
+
+  rpc savePaymentData(Payment) returns (SavePayment);
+  rpc saveAndMaxBalanceOrder(stream Payment) returns (SavePayment);
+  rpc getByUserIdMaxOrder(Payment) returns (stream SavePayment);
+  rpc getByUsersMaxOrder(stream Payment) returns (stream SavePayment);
+
+
+  //file start
+  rpc GenerateTextsFile(TextFileGenerateInfo) returns (stream Chunk);
+
+}
+
+message Payment{
+  repeated int64 productId=1;
+  int64 userId=2;
+  int32 balance=3;
+}
+
+message SavePayment{
+  int64 id=1;
+  repeated int64 productId=2;
+  int64 userId=3;
+  int32 balance=4;
+}
+
+message Product{
+  string title=1;
+  int32 balance=2;
+}
+
+message SaveProduct{
+  int64 id=1;
+  string title=2;
+  int32 balance=3;
+}
+
+message TextFileGenerateInfo{
+  string username=1;
+  sint32 count=2;
+  sint32  n=3;
+  string fileName=4;
+}
+
+message Chunk{
+  bytes data=1;
+  sint32 size=2;
+}

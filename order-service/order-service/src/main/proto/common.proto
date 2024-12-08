@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpccommon";
+option java_outer_classname = "GeneratorProto";
+option objc_class_prefix = "RTG";
+
+package service;
+
+service OrderService{
+  rpc savePaymentData(Payment) returns (SavePayment);
+  rpc saveAndMaxBalanceOrder(stream Payment) returns (SavePayment);
+  rpc getByUserIdMaxOrder(Payment) returns (stream SavePayment);
+  rpc getByUsersMaxOrder(stream Payment) returns (stream SavePayment);
+
+  //file start
+  rpc GenerateTextsFile(TextFileGenerateInfo) returns (stream Chunk);
+}
+
+message Payment{
+  repeated int64 productId=1;
+  int64 userId=2;
+  int32 balance=3;
+}
+
+message SavePayment{
+  int64 id=1;
+  repeated int64 productId=2;
+  int64 userId=3;
+  int32 balance=4;
+}
+
+message TextFileGenerateInfo{
+  string username=1;
+  sint32 count=2;
+  sint32  n=3;
+  string fileName=4;
+}
+
+message Chunk{
+  bytes data=1;
+  sint32 size=2;
+}
